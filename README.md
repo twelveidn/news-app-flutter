@@ -1,17 +1,35 @@
-# news_app
+# Kabar
 
-A new Flutter project.
+A Flutter news reader built with sample data for learning Flutter. It includes
+home, article detail, and favorites screens, plus search, category filters, and
+loading, error, and empty states.
 
-## Getting Started
+The app currently uses `MockNewsService` and
+[`assets/mock/articles.json`](assets/mock/articles.json). It does not call
+NewsAPI.org and does not contain or require an API key.
 
-This project is a starting point for a Flutter application.
+## Run and test
 
-A few resources to get you started if this is your first Flutter project:
+```sh
+flutter pub get
+flutter run
+flutter test
+flutter analyze
+```
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+Favorites are kept in memory and reset when the app closes.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+To preview the mock states while developing, inject a configured
+`MockNewsService` into `NewsApp`:
+
+```dart
+NewsApp(
+  newsService: MockNewsService(
+    response: MockResponse.error,
+    delay: Duration.zero,
+  ),
+)
+```
+
+Set `response` to `MockResponse.success`, `MockResponse.error`, or
+`MockResponse.empty`. The default delay is one second.

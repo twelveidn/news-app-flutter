@@ -1,0 +1,50 @@
+{
+  "status": "ok",
+  "totalResults": 4,
+  "articles": [
+  {
+    "source": {"id": null, "name": "Ruang Sains"},
+    "author": "Tim Redaksi",
+    "title": "Kota-kota mulai menanam pohon untuk menurunkan suhu jalan",
+    "description": "Program peneduhan kota menggabungkan ruang hijau, jalur pejalan kaki, dan pemantauan suhu lingkungan.",
+    "url": "https://example.com/berita/pohon-kota",
+    "urlToImage": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e",
+    "publishedAt": "2026-11-05T08:30:00Z",
+    "content": "Sejumlah kota menguji cara baru untuk membuat jalan lebih nyaman saat cuaca panas.",
+    "category": "Lingkungan"
+  },
+  {
+    "source": {"id": null, "name": "Tekno Hari Ini"},
+    "author": null,
+    "title": "Perpustakaan daerah membuka kelas literasi digital gratis",
+    "description": "Kelas mingguan membantu warga mengenali informasi daring dan menjaga privasi.",
+    "url": "https://example.com/berita/literasi-digital",
+    "urlToImage": "https://images.unsplash.com/photo-1507842217343-583bb7270b66",
+    "publishedAt": "2026-11-04T11:15:00Z",
+    "content": "Peserta dapat mendaftar langsung di perpustakaan terdekat.",
+    "category": "Teknologi"
+  },
+  {
+    "source": {"id": null, "name": "Kabar Olahraga"},
+    "author": "Dina Putri",
+    "title": "Komunitas lari menggelar acara akhir pekan untuk pemula",
+    "description": null,
+    "url": "https://example.com/berita/lari-pemula",
+    "urlToImage": null,
+    "publishedAt": "2026-11-03T06:00:00Z",
+    "content": "Acara ini menyediakan pilihan jarak pendek dan dipandu oleh relawan.",
+    "category": "Olahraga"
+  },
+  {
+    "source": {"id": null, "name": "Berita Nusantara"},
+    "author": null,
+    "title": "Pasar lokal memperluas jadwal untuk mendukung usaha kecil",
+    "description": "Pengunjung dapat menemukan produk pangan dan kerajinan dari pelaku usaha sekitar.",
+    "url": "https://example.com/berita/pasar-lokal",
+    "urlToImage": "https://images.unsplash.com/photo-1488459716781-31db52582fe9",
+    "publishedAt": "2026-11-02T09:00:00Z",
+    "content": "Penyelenggara menyebut penambahan jadwal sebagai uji coba selama satu bulan.",
+    "category": "Bisnis"
+  }
+  ]
+}
