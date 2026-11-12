@@ -32,10 +32,10 @@ class ArticleCard extends StatelessWidget {
             children: [
               ArticleImage(
                 imageUrl: article.urlToImage,
-                width: 104,
-                height: 112,
+                width: 112,
+                height: 120,
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,7 +44,8 @@ class ArticleCard extends StatelessWidget {
                       article.category ?? article.sourceName ?? 'Berita',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppTheme.accent,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.3,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -55,6 +56,8 @@ class ArticleCard extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: AppTheme.ink,
                         fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                        height: 1.2,
                       ),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,

@@ -4,6 +4,9 @@ import 'package:provider/provider.dart';
 import '../models/article.dart';
 import '../providers/bookmark_provider.dart';
 import '../providers/news_provider.dart';
+import '../theme/app_theme.dart';
+import '../utils/article_formatters.dart';
+import '../widgets/article_image.dart';
 import 'bookmark_screen.dart';
 import 'detail_screen.dart';
 import '../widgets/article_card.dart';
@@ -41,35 +44,67 @@ class _HomeScreenState extends State<HomeScreen> {
     final articles = _filterArticles(provider.articles);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Kabar Hari Ini',
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-        actions: [
-          IconButton(
-            onPressed: () => _openBookmarks(context),
-            tooltip: 'Buka favorit',
-            icon: Badge(
-              isLabelVisible: bookmarks.articles.isNotEmpty,
-              label: Text('${bookmarks.articles.length}'),
-              child: const Icon(Icons.bookmarks_outlined),
-            ),
-          ),
-        ],
-      ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              padding: const EdgeInsets.fromLTRB(20, 12, 12, 14),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'EDISI DIGITAL  ·  BERITA TERPILIH',
+                          style: Theme.of(context).textTheme.labelSmall
+                              ?.copyWith(
+                                color: AppTheme.accent,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 1.2,
+                              ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Kabar Hari Ini',
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(fontSize: 30, letterSpacing: -1),
+                        ),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () => _openBookmarks(context),
+                    tooltip: 'Buka favorit',
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: AppTheme.ink,
+                      side: const BorderSide(color: AppTheme.divider),
+                    ),
+                    icon: Badge(
+                      isLabelVisible: bookmarks.articles.isNotEmpty,
+                      label: Text('${bookmarks.articles.length}'),
+                      child: const Icon(Icons.bookmarks_outlined),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Divider(height: 1, color: AppTheme.divider),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 2),
               child: TextField(
                 controller: _searchController,
                 onChanged: (value) => setState(() => _query = value),
                 decoration: InputDecoration(
                   hintText: 'Cari berita...',
                   prefixIcon: const Icon(Icons.search),
+                  prefixIconColor: AppTheme.accent,
                   suffixIcon: _query.isEmpty
                       ? null
                       : IconButton(
@@ -80,15 +115,26 @@ class _HomeScreenState extends State<HomeScreen> {
                   filled: true,
                   fillColor: Colors.white,
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(color: AppTheme.divider),
                   ),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(color: AppTheme.divider),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(
+                      color: AppTheme.accent,
+                      width: 1.5,
+                    ),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 14),
                 ),
               ),
             ),
             SizedBox(
-              height: 56,
+              height: 54,
               child: ListView.separated(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
@@ -102,6 +148,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   return ChoiceChip(
                     label: Text(category),
                     selected: _selectedCategory == category,
+                    showCheckmark: false,
+                    selectedColor: AppTheme.ink,
+                    backgroundColor: Colors.white,
+                    side: BorderSide(
+                      color: _selectedCategory == category
+                          ? AppTheme.ink
+                          : AppTheme.divider,
+                    ),
+                    labelStyle: TextStyle(
+                      color: _selectedCategory == category
+                          ? Colors.white
+                          : AppTheme.ink,
+                      fontWeight: FontWeight.w600,
+                    ),
                     onSelected: (selected) {
                       if (selected) {
                         setState(() => _selectedCategory = category);
@@ -192,22 +252,52 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
         }
-        return ListView.separated(
+        return ListView(
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.all(16),
-          itemCount: articles.length,
-          separatorBuilder: (context, index) => const SizedBox(height: 16),
-          itemBuilder: (context, index) {
-            final article = articles[index];
-            return ArticleCard(
-              article: article,
-              onTap: () => _openArticle(context, article),
-              isBookmarked: bookmarks.isBookmarked(article),
-              onBookmarkToggle: () => bookmarks.toggle(article),
-            );
-          },
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
+          children: [
+            _sectionHeading(context, 'BERITA PILIHAN'),
+            const SizedBox(height: 12),
+            _FeaturedArticle(
+              article: articles.first,
+              isBookmarked: bookmarks.isBookmarked(articles.first),
+              onTap: () => _openArticle(context, articles.first),
+              onBookmarkToggle: () => bookmarks.toggle(articles.first),
+            ),
+            if (articles.length > 1) ...[
+              const SizedBox(height: 24),
+              _sectionHeading(context, 'BERITA LAINNYA'),
+              const SizedBox(height: 12),
+              for (final article in articles.skip(1)) ...[
+                ArticleCard(
+                  article: article,
+                  onTap: () => _openArticle(context, article),
+                  isBookmarked: bookmarks.isBookmarked(article),
+                  onBookmarkToggle: () => bookmarks.toggle(article),
+                ),
+                const SizedBox(height: 12),
+              ],
+            ],
+          ],
         );
     }
+  }
+
+  Widget _sectionHeading(BuildContext context, String title) {
+    return Row(
+      children: [
+        Text(
+          title,
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+            color: AppTheme.ink,
+            fontWeight: FontWeight.w800,
+            letterSpacing: 1.3,
+          ),
+        ),
+        const SizedBox(width: 12),
+        const Expanded(child: Divider(height: 1, color: AppTheme.divider)),
+      ],
+    );
   }
 
   Widget _stateList(BuildContext context, Widget state) {
@@ -246,6 +336,144 @@ class _HomeScreenState extends State<HomeScreen> {
   void _openBookmarks(BuildContext context) {
     Navigator.of(context)
         .push(MaterialPageRoute<void>(builder: (_) => const BookmarkScreen()));
+  }
+}
+
+class _FeaturedArticle extends StatelessWidget {
+  const _FeaturedArticle({
+    required this.article,
+    required this.isBookmarked,
+    required this.onTap,
+    required this.onBookmarkToggle,
+  });
+
+  final Article article;
+  final bool isBookmarked;
+  final VoidCallback onTap;
+  final VoidCallback onBookmarkToggle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: Material(
+          color: AppTheme.ink,
+          child: InkWell(
+            onTap: onTap,
+            child: SizedBox(
+              height: 330,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Opacity(
+                    opacity: 0.6,
+                    child: ArticleImage(
+                      imageUrl: article.urlToImage,
+                      width: double.infinity,
+                      height: 330,
+                      borderRadius: 0,
+                    ),
+                  ),
+                  const DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Color(0x0010253F), Color(0xF210253F)],
+                        stops: [0.2, 1],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: IconButton(
+                      onPressed: onBookmarkToggle,
+                      tooltip: isBookmarked
+                          ? 'Hapus dari favorit'
+                          : 'Simpan ke favorit',
+                      style: IconButton.styleFrom(
+                        backgroundColor: const Color(0xAA10253F),
+                        foregroundColor: Colors.white,
+                      ),
+                      icon: Icon(
+                        isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 20,
+                    right: 20,
+                    bottom: 20,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          article.category?.toUpperCase() ??
+                              article.sourceName?.toUpperCase() ??
+                              'BERITA',
+                          style: const TextStyle(
+                            color: Color(0xFFB8D9FA),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 1.4,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 9),
+                        Text(
+                          article.title,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Georgia',
+                            fontSize: 26,
+                            fontWeight: FontWeight.w700,
+                            height: 1.12,
+                          ),
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        if (article.description != null) ...[
+                          const SizedBox(height: 8),
+                          Text(
+                            article.description!,
+                            style: const TextStyle(
+                              color: Color(0xFFE0EAF5),
+                              fontSize: 13,
+                              height: 1.35,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                        const SizedBox(height: 10),
+                        Text(
+                          [
+                            article.sourceName ?? 'Kabar Hari Ini',
+                            formatPublishedAt(article.publishedAt),
+                          ].join('  ·  '),
+                          style: const TextStyle(
+                            color: Color(0xFFCFDCEC),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 

@@ -1,26 +1,25 @@
 # Kabar
 
-A Flutter news reader built with sample data for learning Flutter. It includes
-home, article detail, and favorites screens, plus search, category filters, and
+A Flutter news reader that loads headlines from NewsAPI.org. It includes home,
+article detail, and favorites screens, plus search, category filters, and
 loading, error, and empty states.
-
-The app currently uses `MockNewsService` and
-[`assets/mock/articles.json`](assets/mock/articles.json). It does not call
-NewsAPI.org and does not contain or require an API key.
 
 ## Run and test
 
 ```sh
 flutter pub get
-flutter run
+cp -n env.example.json env.json
+# Add your NewsAPI.org key as NEWS_API_KEY in env.json.
+flutter run --dart-define-from-file=env.json
 flutter test
 flutter analyze
 ```
 
-Favorites are kept in memory and reset when the app closes.
+Keep `env.json` private; it is excluded from Git. The API key is compiled into
+the app, so restrict it appropriately for your development setup.
 
-To preview the mock states while developing, inject a configured
-`MockNewsService` into `NewsApp`:
+Favorites are kept in memory and reset when the app closes. Tests and mock
+previews can inject a configured `MockNewsService` into `NewsApp`:
 
 ```dart
 NewsApp(

@@ -23,7 +23,10 @@ void main() {
     expect(articles.first.sourceName, 'Ruang Sains');
     expect(articles.first.publishedAt, DateTime.parse('2026-11-05T08:30:00Z'));
     expect(articles[2].description, isNull);
-    expect(articles[2].urlToImage, isNull);
+    expect(
+      articles[2].urlToImage,
+      'https://images.unsplash.com/photo-1552674605-db6ffd4facb5',
+    );
   });
 
   test('uses a safe title when the response omits it', () {

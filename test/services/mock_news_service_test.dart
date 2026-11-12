@@ -12,6 +12,7 @@ void main() {
 
     expect(articles, hasLength(4));
     expect(articles.first.title, contains('Kota-kota'));
+    expect(articles.every((article) => article.urlToImage != null), isTrue);
   });
 
   test('returns an empty list in empty mode', () async {
